@@ -100,8 +100,8 @@ if (inquiryBubble) {
 
   const updateInquiryCopy = () => {
     if (localStorage.getItem(inquiryStorageKey) === 'true') {
-      inquiryEyebrow.textContent = 'SEE YOU SOON';
-      inquirySubtext.textContent = "We'll be in touch within 48 hours.";
+      inquiryEyebrow.textContent = 'YOU\'RE BOOKED';
+      inquirySubtext.textContent = "Check your email for the calendar invite.";
     }
   };
 
