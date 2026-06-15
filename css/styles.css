@@ -998,3 +998,131 @@ input:focus { outline: 2px solid var(--color-gold-light); border-color: var(--co
   .quiz-result__ctas { flex-direction: column; }
   .quiz-result__ctas .button { width: 100%; text-align: center; }
 }
+
+/* ─────────────────────────────────────────────────────────────── */
+/* 19. Enhanced Animations                                         */
+/* ─────────────────────────────────────────────────────────────── */
+
+/* Shared keyframe – opacity + subtle rise */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero: staggered child entrance on page load */
+.hero.visible .hero__inner > *:nth-child(1) { animation: rise-in 0.70s cubic-bezier(.22,1,.36,1) 0.05s both; }
+.hero.visible .hero__inner > *:nth-child(2) { animation: rise-in 0.75s cubic-bezier(.22,1,.36,1) 0.18s both; }
+.hero.visible .hero__inner > *:nth-child(3) { animation: rise-in 0.70s cubic-bezier(.22,1,.36,1) 0.32s both; }
+.hero.visible .hero__inner > *:nth-child(4) { animation: rise-in 0.70s cubic-bezier(.22,1,.36,1) 0.46s both; }
+.hero.visible .hero__inner > *:nth-child(5) { animation: rise-in 0.65s cubic-bezier(.22,1,.36,1) 0.60s both; }
+
+/* Layout split: stagger the two columns */
+.animate-on-scroll.layout-split.visible > article:nth-child(1) { animation: rise-in 0.55s cubic-bezier(.22,1,.36,1) 0.06s both; }
+.animate-on-scroll.layout-split.visible > article:nth-child(2) { animation: rise-in 0.55s cubic-bezier(.22,1,.36,1) 0.22s both; }
+
+/* Card grids: staggered entrance when section scrolls into view */
+.animate-on-scroll.visible .card-grid > *:nth-child(1) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.06s both; }
+.animate-on-scroll.visible .card-grid > *:nth-child(2) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.16s both; }
+.animate-on-scroll.visible .card-grid > *:nth-child(3) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.26s both; }
+.animate-on-scroll.visible .card-grid > *:nth-child(4) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.36s both; }
+
+/* Three-up grid: stagger */
+.animate-on-scroll.visible .three-up-grid > *:nth-child(1) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.06s both; }
+.animate-on-scroll.visible .three-up-grid > *:nth-child(2) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.18s both; }
+.animate-on-scroll.visible .three-up-grid > *:nth-child(3) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.30s both; }
+
+/* Timeline grid: stagger (about page) */
+.animate-on-scroll.visible .timeline-grid > *:nth-child(1) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.06s both; }
+.animate-on-scroll.visible .timeline-grid > *:nth-child(2) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.15s both; }
+.animate-on-scroll.visible .timeline-grid > *:nth-child(3) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.24s both; }
+.animate-on-scroll.visible .timeline-grid > *:nth-child(4) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.33s both; }
+
+/* List grid: stagger (services "Who It's For") */
+.animate-on-scroll.visible .list-grid > *:nth-child(1) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.06s both; }
+.animate-on-scroll.visible .list-grid > *:nth-child(2) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.13s both; }
+.animate-on-scroll.visible .list-grid > *:nth-child(3) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.20s both; }
+.animate-on-scroll.visible .list-grid > *:nth-child(4) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.27s both; }
+.animate-on-scroll.visible .list-grid > *:nth-child(5) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.34s both; }
+
+/* Portfolio grid: stagger (7 case study cards) */
+.animate-on-scroll.visible .portfolio-grid > *:nth-child(1) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.06s both; }
+.animate-on-scroll.visible .portfolio-grid > *:nth-child(2) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.14s both; }
+.animate-on-scroll.visible .portfolio-grid > *:nth-child(3) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.22s both; }
+.animate-on-scroll.visible .portfolio-grid > *:nth-child(4) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.30s both; }
+.animate-on-scroll.visible .portfolio-grid > *:nth-child(5) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.38s both; }
+.animate-on-scroll.visible .portfolio-grid > *:nth-child(6) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.46s both; }
+.animate-on-scroll.visible .portfolio-grid > *:nth-child(7) { animation: rise-in 0.5s cubic-bezier(.22,1,.36,1) 0.54s both; }
+
+/* Nav link: sliding gold underline on hover */
+.nav-link { position: relative; }
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--color-gold);
+  transition: width 0.25s ease;
+}
+.nav-link:hover::after,
+.nav-link.active::after { width: 100%; }
+
+/* Cards: hover lift */
+.card { transition: transform 0.28s ease, box-shadow 0.28s ease; }
+.card:not(.faq-item):hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(28,26,23,0.08); }
+
+/* Service card: gold border brightens on hover */
+.card--service { transition: transform 0.28s ease, box-shadow 0.28s ease, border-top-color 0.28s ease; }
+.card--service:hover { border-top-color: var(--color-gold); }
+
+/* Case study card images: zoom reveal on hover */
+.case-study-card__image { overflow: hidden; }
+.case-study-card__image img { transition: transform 0.5s ease; display: block; width: 100%; height: 100%; object-fit: cover; }
+.case-study-card:hover .case-study-card__image img { transform: scale(1.04); }
+
+/* Founder story: image zoom on hover */
+.founder-story__media img { transition: transform 0.55s ease; }
+.founder-story__media:hover img { transform: scale(1.03); }
+
+/* Service panels: image zoom on hover */
+.service-panel__media img { transition: transform 0.55s ease; }
+.service-panel:hover .service-panel__media img { transform: scale(1.04); }
+
+/* Deliverable tags: gold hover accent */
+.deliverables span { transition: border-color 0.2s ease, color 0.2s ease; }
+.deliverables span:hover { border-color: var(--color-gold); color: var(--color-gold); cursor: default; }
+
+/* Filter tabs: pointer cursor + hover color */
+.filter-tab { cursor: pointer; transition: color 0.2s ease; }
+.filter-tab:not(.is-active):hover { color: var(--color-text-dark); }
+
+/* Button: press feedback */
+.button:active { transform: translateY(1px) scale(0.98); transition-duration: 0.08s; }
+
+/* Inquiry bubble: gentle pulse to attract attention (starts 3 s after page load) */
+@keyframes bubble-pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(194,126,14,0.35); }
+  50%       { box-shadow: 0 4px 20px rgba(194,126,14,0.35), 0 0 0 8px rgba(194,126,14,0.12); }
+}
+.inquiry-bubble__trigger { animation: bubble-pulse 2.8s ease-in-out 3s infinite; }
+.inquiry-bubble.is-open .inquiry-bubble__trigger { animation: none; }
+
+/* Stat counter span (hero footer) */
+.stat-num { display: inline-block; }
+
+/* Reduce motion: honour user preference */
+@media (prefers-reduced-motion: reduce) {
+  .inquiry-bubble__trigger { animation: none !important; }
+  .hero.visible .hero__inner > *,
+  .animate-on-scroll.visible .card-grid > *,
+  .animate-on-scroll.visible .three-up-grid > *,
+  .animate-on-scroll.visible .timeline-grid > *,
+  .animate-on-scroll.visible .list-grid > *,
+  .animate-on-scroll.visible .portfolio-grid > *,
+  .animate-on-scroll.layout-split.visible > article { animation: none !important; }
+  .card:hover, .card--service:hover { transform: none; box-shadow: none; }
+  .founder-story__media:hover img,
+  .service-panel:hover .service-panel__media img,
+  .case-study-card:hover .case-study-card__image img { transform: none; }
+}

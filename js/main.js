@@ -585,3 +585,46 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
     successTimer = window.setTimeout(closePopup, 6000);
   });
 }
+
+/* Stat counter: animates the numbers in the hero footer on scroll into view */
+(function () {
+  const heroFooter = document.querySelector('.hero__footer p');
+  if (!heroFooter) return;
+
+  heroFooter.innerHTML = heroFooter.innerHTML.replace(/(\d+)/g, (n) =>
+    `<span class="stat-num" data-target="${n}">0</span>`
+  );
+
+  const spans = heroFooter.querySelectorAll('.stat-num');
+  if (!spans.length) return;
+
+  const runCounters = () => {
+    spans.forEach((span) => {
+      const target = parseInt(span.dataset.target, 10);
+      const steps = 30;
+      let step = 0;
+      const timer = setInterval(() => {
+        step++;
+        span.textContent = Math.round((step / steps) * target);
+        if (step >= steps) {
+          span.textContent = target;
+          clearInterval(timer);
+        }
+      }, 1000 / steps);
+    });
+  };
+
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          runCounters();
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.6 });
+    obs.observe(heroFooter);
+  } else {
+    runCounters();
+  }
+}());
