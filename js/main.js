@@ -582,6 +582,18 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
     exitEmail.removeAttribute('aria-invalid');
     storeSubscriber(email);
     exitPopup.classList.add('is-success');
+
+    // Auto-download the ebook PDF
+    const ebookAnchor = exitPopup.querySelector('[data-exit-popup-success] a[download]');
+    if (ebookAnchor) {
+      const dl = document.createElement('a');
+      dl.href = ebookAnchor.href;
+      dl.download = ebookAnchor.getAttribute('download') || 'Altaura Brand Audit Ebook.pdf';
+      document.body.appendChild(dl);
+      dl.click();
+      document.body.removeChild(dl);
+    }
+
     successTimer = window.setTimeout(closePopup, 6000);
   });
 }
