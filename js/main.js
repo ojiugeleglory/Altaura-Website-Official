@@ -598,45 +598,50 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
   });
 }
 
-/* Stat counter: animates the numbers in the hero footer on scroll into view */
+/* 100% stat counter — triggers once on viewport entry, respects reduced-motion */
 (function () {
-  const heroFooter = document.querySelector('.hero__footer p');
-  if (!heroFooter) return;
+  var el = document.querySelector('[data-count-up]');
+  if (!el) return;
 
-  heroFooter.innerHTML = heroFooter.innerHTML.replace(/(\d+)/g, (n) =>
-    `<span class="stat-num" data-target="${n}">0</span>`
-  );
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const spans = heroFooter.querySelectorAll('.stat-num');
-  if (!spans.length) return;
+  var duration = 2600;
+  var triggered = false;
 
-  const runCounters = () => {
-    spans.forEach((span) => {
-      const target = parseInt(span.dataset.target, 10);
-      const steps = 30;
-      let step = 0;
-      const timer = setInterval(() => {
-        step++;
-        span.textContent = Math.round((step / steps) * target);
-        if (step >= steps) {
-          span.textContent = target;
-          clearInterval(timer);
-        }
-      }, 1000 / steps);
-    });
+  var run = function () {
+    if (triggered) return;
+    triggered = true;
+    var startTime = null;
+
+    var step = function (timestamp) {
+      if (!startTime) startTime = timestamp;
+      var elapsed = timestamp - startTime;
+      var progress = Math.min(elapsed / duration, 1);
+      /* Ease-out cubic — decelerates smoothly into 100 */
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * 100) + '%';
+      if (progress < 1) {
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = '100%';
+      }
+    };
+
+    requestAnimationFrame(step);
   };
 
   if ('IntersectionObserver' in window) {
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          runCounters();
+          run();
           obs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.6 });
-    obs.observe(heroFooter);
+    }, { threshold: 0.5 });
+    obs.observe(el);
   } else {
-    runCounters();
+    run();
   }
 }());
+
