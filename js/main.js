@@ -645,3 +645,56 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
   }
 }());
 
+/* Services dropdown — accordion on mobile, CSS hover on desktop */
+(function () {
+  var items = document.querySelectorAll('.nav-item--dropdown');
+  if (!items.length) return;
+
+  function closeAll() {
+    items.forEach(function (item) {
+      item.classList.remove('is-open');
+      item.querySelector('.nav-dropdown__trigger').setAttribute('aria-expanded', 'false');
+      item.querySelector('.nav-dropdown').classList.remove('is-open');
+    });
+  }
+
+  items.forEach(function (item) {
+    var trigger = item.querySelector('.nav-dropdown__trigger');
+    var panel = item.querySelector('.nav-dropdown');
+
+    trigger.addEventListener('click', function () {
+      if (!window.matchMedia('(max-width: 767px)').matches) return;
+      var isOpen = item.classList.contains('is-open');
+      closeAll();
+      if (!isOpen) {
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.classList.add('is-open');
+      }
+    });
+
+    item.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closeAll(); trigger.focus(); }
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    if (window.matchMedia('(max-width: 767px)').matches) return;
+    items.forEach(function (item) {
+      if (!item.contains(e.target)) item.classList.remove('is-open');
+    });
+  });
+}());
+
+/* Footer accordion — mobile only (desktop sections always visible via CSS) */
+(function () {
+  var toggles = document.querySelectorAll('.footer-section__toggle');
+  toggles.forEach(function (toggle) {
+    toggle.addEventListener('click', function () {
+      var isOpen = this.getAttribute('aria-expanded') === 'true';
+      this.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+      this.nextElementSibling.classList.toggle('is-open', !isOpen);
+    });
+  });
+}());
+

@@ -19,7 +19,7 @@
         <div class="nav-panel" id="site-nav-panel">
           <a href="index.html" class="nav-link">Home</a>
           <a href="about.html" class="nav-link">About</a>
-          <a href="services.html" class="nav-link">Services</a>
+          <div class="nav-item--dropdown"><button class="nav-dropdown__trigger nav-link" type="button" aria-expanded="false" aria-haspopup="true">Services<svg class="nav-dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true" focusable="false"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-dropdown"><a href="services.html#brand-audit" class="nav-dropdown__link">Brand Audit</a><a href="services.html#brand-strategy" class="nav-dropdown__link">Brand Strategy</a><a href="services.html#visual-refinement" class="nav-dropdown__link">Visual Refinement</a><a href="services.html#brand-transformation" class="nav-dropdown__link">Brand Transformation</a></div></div>
           <a href="portfolio.html" class="nav-link">Portfolio</a>
           <a href="quiz.html" class="nav-link">Brand Quiz</a>
           <a href="ebooks.html" class="nav-link">Resources</a>
@@ -64,33 +64,44 @@
     </main>
 
     <footer class="site-footer">
-      <div class="container footer-grid">
-        <article>
-          <img src="assets/images/logo.png" alt="Altaura logo" class="footer-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'" />
-          <span class="footer-fallback" style="display:none;">ALTAURA</span>
-          <p>Brand Elevation Strategy</p>
-        </article>
-        <article>
-          <h3>Navigation</h3>
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="services.html">Services</a>
-          <a href="portfolio.html">Portfolio</a>
-          <a href="quiz.html">Brand Quiz</a>
-          <a href="ebooks.html">Resources</a>
-          <a href="contact.html">Contact</a>
-        </article>
-        <article>
-          <h3>Contact</h3>
-          <a href="mailto:altauraofficial@gmail.com">altauraofficial@gmail.com</a>
-          <a href="https://wa.me/2348033055684">+234 803 305 5684</a>
-        </article>
-        <article>
-          <h3>Social</h3>
-          <a href="https://instagram.com/altauraofficial">Instagram @altauraofficial</a>
-        </article>
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <p class="footer-statement">Refining how brands look, feel, and are perceived.</p>
+          </div>
+          <div class="footer-section" data-footer-accordion>
+            <button class="footer-section__toggle" type="button" aria-expanded="false"><span>Explore</span><span class="footer-section__icon" aria-hidden="true">+</span></button>
+            <div class="footer-section__body">
+              <a href="index.html">Home</a>
+              <a href="about.html">About</a>
+              <a href="services.html">Services</a>
+              <a href="portfolio.html">Portfolio</a>
+              <a href="quiz.html">Brand Quiz</a>
+              <a href="ebooks.html">Resources</a>
+              <a href="contact.html">Contact</a>
+            </div>
+          </div>
+          <div class="footer-section" data-footer-accordion>
+            <button class="footer-section__toggle" type="button" aria-expanded="false"><span>Contact</span><span class="footer-section__icon" aria-hidden="true">+</span></button>
+            <div class="footer-section__body">
+              <a href="mailto:altauraofficial@gmail.com">altauraofficial@gmail.com</a>
+              <a href="https://wa.me/2348033055684">+234 803 305 5684</a>
+            </div>
+          </div>
+          <div class="footer-section" data-footer-accordion>
+            <button class="footer-section__toggle" type="button" aria-expanded="false"><span>Social</span><span class="footer-section__icon" aria-hidden="true">+</span></button>
+            <div class="footer-section__body">
+              <a href="https://instagram.com/altauraofficial">Instagram @altauraofficial</a>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="container footer-bar"><p>© 2026 Altaura. All rights reserved.</p><a href="https://forms.gle/a91VRKFu6KSutTgX9">Inquiry Form</a></div>
+      <div class="container">
+        <div class="footer-bar">
+          <p>&#169; 2026 Altaura. All rights reserved.</p>
+          <a href="https://forms.gle/a91VRKFu6KSutTgX9">Inquiry Form</a>
+        </div>
+      </div>
     </footer>
 
     <div class="exit-popup" data-exit-popup aria-hidden="true">
