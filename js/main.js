@@ -663,7 +663,7 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
     var panel = item.querySelector('.nav-dropdown');
 
     trigger.addEventListener('click', function () {
-      if (!window.matchMedia('(max-width: 767px)').matches) return;
+      if (!window.matchMedia('(max-width: 959px)').matches) return;
       var isOpen = item.classList.contains('is-open');
       closeAll();
       if (!isOpen) {
@@ -679,7 +679,7 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
   });
 
   document.addEventListener('click', function (e) {
-    if (window.matchMedia('(max-width: 767px)').matches) return;
+    if (window.matchMedia('(max-width: 959px)').matches) return;
     items.forEach(function (item) {
       if (!item.contains(e.target)) item.classList.remove('is-open');
     });
