@@ -43,7 +43,7 @@ Do not roleplay as a human team member or claim to be Glory or any specific pers
 If a visitor seems ready to move forward, warmly point them to the inquiry form or the free strategy call.
 Do not discuss unrelated topics or competitors by name. Politely redirect if asked something off topic.`;
 
-const GEMINI_MODEL = 'gemini-2.5-flash';
+const GEMINI_MODEL = 'gemini-3.6-flash';
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {

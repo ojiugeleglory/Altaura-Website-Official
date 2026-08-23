@@ -57,6 +57,8 @@ new FAQ answers.
 
 ## Switching models later
 
-`api/chat.js` currently uses `gemini-2.5-flash`, a good balance of quality
-and speed. If you ever want to try a lighter, even higher-quota option,
-change the `GEMINI_MODEL` constant near the top to `gemini-2.5-flash-lite`.
+`api/chat.js` currently uses `gemini-3.6-flash`. Google occasionally retires
+older model names for new API keys, if you ever see a 404 error mentioning
+a model name in Vercel's Logs, that error message tells you exactly which
+model name to switch to. Just update the `GEMINI_MODEL` constant near the
+top of `api/chat.js` to match.
