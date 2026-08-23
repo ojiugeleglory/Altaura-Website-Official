@@ -41,11 +41,25 @@
         </div>
       </div>
 
+      <div class="admin-tabs" style="display:flex; gap:24px; border-bottom:1px solid var(--color-border); margin-bottom:28px;">
+        <button class="filter-tab is-active" id="admin-tab-posts" type="button" data-tab="posts">Posts</button>
+        <button class="filter-tab" id="admin-tab-subscribers" type="button" data-tab="subscribers">Subscribers</button>
+      </div>
+
       <!-- LIST -->
       <div id="admin-list-view">
         <div class="admin-list" id="admin-post-list"></div>
         <div class="admin-empty admin-hidden" id="admin-list-empty">
           <p>No posts yet. Click "New Post" to write your first Insight.</p>
+        </div>
+      </div>
+
+      <!-- SUBSCRIBERS -->
+      <div id="admin-subscribers-view" class="admin-hidden">
+        <p class="admin-status-msg" style="margin-bottom:16px;" id="admin-subscribers-count"></p>
+        <div class="admin-list" id="admin-subscribers-list"></div>
+        <div class="admin-empty admin-hidden" id="admin-subscribers-empty">
+          <p>No subscribers yet. Once people sign up in your footer, they'll show up here.</p>
         </div>
       </div>
 

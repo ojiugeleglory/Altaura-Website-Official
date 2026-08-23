@@ -18,6 +18,13 @@
   const postList = document.getElementById('admin-post-list');
   const listEmpty = document.getElementById('admin-list-empty');
 
+  const tabPosts = document.getElementById('admin-tab-posts');
+  const tabSubscribers = document.getElementById('admin-tab-subscribers');
+  const subscribersView = document.getElementById('admin-subscribers-view');
+  const subscribersList = document.getElementById('admin-subscribers-list');
+  const subscribersEmpty = document.getElementById('admin-subscribers-empty');
+  const subscribersCount = document.getElementById('admin-subscribers-count');
+
   const emailInput = document.getElementById('admin-email');
   const passwordInput = document.getElementById('admin-password');
   const loginBtn = document.getElementById('admin-login-btn');
@@ -63,6 +70,57 @@
     dashboardView.classList.toggle('admin-hidden', view === 'login');
     listView.classList.toggle('admin-hidden', view !== 'list');
     editorView.classList.toggle('admin-hidden', view !== 'editor');
+    subscribersView.classList.toggle('admin-hidden', view !== 'subscribers');
+
+    const tabsRow = document.querySelector('.admin-tabs');
+    if (tabsRow) tabsRow.classList.toggle('admin-hidden', view === 'editor');
+    newPostBtn.classList.toggle('admin-hidden', view !== 'list');
+
+    tabPosts.classList.toggle('is-active', view === 'list');
+    tabSubscribers.classList.toggle('is-active', view === 'subscribers');
+  }
+
+  tabPosts.addEventListener('click', () => {
+    showView('list');
+    loadPosts();
+  });
+
+  tabSubscribers.addEventListener('click', () => {
+    showView('subscribers');
+    loadSubscribers();
+  });
+
+  async function loadSubscribers() {
+    subscribersList.innerHTML = '<div class="admin-list__row">Loading…</div>';
+    subscribersCount.textContent = '';
+
+    const { data, error } = await supabaseClient
+      .from('subscribers')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      subscribersList.innerHTML = '';
+      subscribersEmpty.classList.remove('admin-hidden');
+      subscribersEmpty.querySelector('p').textContent = 'Could not load subscribers: ' + error.message;
+      return;
+    }
+
+    if (!data || !data.length) {
+      subscribersList.innerHTML = '';
+      subscribersEmpty.classList.remove('admin-hidden');
+      subscribersEmpty.querySelector('p').textContent = "No subscribers yet. Once people sign up in your footer, they'll show up here.";
+      return;
+    }
+
+    subscribersEmpty.classList.add('admin-hidden');
+    subscribersCount.textContent = `${data.length} subscriber${data.length === 1 ? '' : 's'}`;
+    subscribersList.innerHTML = data.map((sub) => `
+      <div class="admin-list__row" style="grid-template-columns: 1fr auto;">
+        <div>${sub.email}</div>
+        <span style="color:var(--color-text-muted); font-size:12px;">${formatDate(sub.created_at)}</span>
+      </div>
+    `).join('');
   }
 
   async function checkSession() {
