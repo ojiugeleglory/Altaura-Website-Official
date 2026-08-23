@@ -16,15 +16,31 @@
   let hasGreeted = false;
   let isSending = false;
 
+  function stripMarkdown(text) {
+    return text
+      // bold / italics: **text** or *text* or __text__ or _text_ -> text
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/__(.+?)__/g, '$1')
+      .replace(/\*(.+?)\*/g, '$1')
+      .replace(/_(.+?)_/g, '$1')
+      // heading markers at the start of a line: ## Heading -> Heading
+      .replace(/^#{1,6}\s+/gm, '')
+      // bullet markers at the start of a line: "- item" or "* item" -> item
+      .replace(/^[\s]*[-*]\s+/gm, '')
+      // markdown links: [text](url) -> text (url)
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)');
+  }
+
   function linkify(text) {
     const urlPattern = /(https?:\/\/[^\s]+)/g;
-    const escaped = text
+    const clean = stripMarkdown(text);
+    const escaped = clean
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
     return escaped.replace(urlPattern, (url) => {
-      const clean = url.replace(/[.,)]+$/, '');
-      return `<a href="${clean}" target="_blank" rel="noreferrer">${clean}</a>`;
+      const cleanUrl = url.replace(/[.,)]+$/, '');
+      return `<a href="${cleanUrl}" target="_blank" rel="noreferrer">${cleanUrl}</a>`;
     });
   }
 
