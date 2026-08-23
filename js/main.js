@@ -87,62 +87,7 @@ faqItems.forEach((item) => {
   }
 });
 
-/* Sticky Inquiry Bubble */
-const inquiryBubble = document.querySelector('[data-inquiry-bubble]');
-
-if (inquiryBubble) {
-  const inquiryTrigger = inquiryBubble.querySelector('.inquiry-bubble__trigger');
-  const inquiryClose = inquiryBubble.querySelector('.inquiry-bubble__close');
-  const inquiryCta = inquiryBubble.querySelector('[data-inquiry-cta]');
-  const inquiryEyebrow = inquiryBubble.querySelector('[data-inquiry-eyebrow]');
-  const inquirySubtext = inquiryBubble.querySelector('[data-inquiry-subtext]');
-  const inquiryStorageKey = 'altaura_inquiry_clicked';
-
-  const updateInquiryCopy = () => {
-    if (localStorage.getItem(inquiryStorageKey) === 'true') {
-      inquiryEyebrow.textContent = 'YOU\'RE BOOKED';
-      inquirySubtext.textContent = "Check your email for the calendar invite.";
-    }
-  };
-
-  const openInquiryBubble = () => {
-    updateInquiryCopy();
-    inquiryBubble.classList.add('is-open');
-    inquiryTrigger.setAttribute('aria-expanded', 'true');
-  };
-
-  const closeInquiryBubble = () => {
-    inquiryBubble.classList.remove('is-open');
-    inquiryTrigger.setAttribute('aria-expanded', 'false');
-  };
-
-  inquiryTrigger.addEventListener('click', (event) => {
-    event.stopPropagation();
-    openInquiryBubble();
-  });
-
-  inquiryClose.addEventListener('click', (event) => {
-    event.stopPropagation();
-    closeInquiryBubble();
-  });
-
-  inquiryCta.addEventListener('click', () => {
-    localStorage.setItem(inquiryStorageKey, 'true');
-    updateInquiryCopy();
-  });
-
-  document.addEventListener('click', (event) => {
-    if (inquiryBubble.classList.contains('is-open') && !inquiryBubble.contains(event.target)) {
-      closeInquiryBubble();
-    }
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      closeInquiryBubble();
-    }
-  });
-}
+/* Sticky Chat Widget: see js/chat-widget.js */
 
 /* Brand Clarity Quiz */
 (function () {
