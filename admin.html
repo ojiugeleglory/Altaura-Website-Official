@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <title>Insights Admin | Altaura</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=DM+Sans:wght@300;400;500&display=swap" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body class="admin-shell">
+
+    <!-- LOGIN -->
+    <div id="admin-login-view" class="container admin-login">
+      <a href="index.html"><img src="assets/images/ALTAURA LOGO.png" alt="Altaura" style="height:28px; margin-bottom:32px;" /></a>
+      <p class="eyebrow">Insights</p>
+      <h1 style="font-size:32px;">Admin Sign In</h1>
+      <p class="lede" style="margin-bottom:28px;">Sign in to write and publish Insights posts.</p>
+      <div class="field">
+        <label for="admin-email">Email</label>
+        <input type="email" id="admin-email" autocomplete="username" />
+      </div>
+      <div class="field">
+        <label for="admin-password">Password</label>
+        <input type="password" id="admin-password" autocomplete="current-password" />
+      </div>
+      <button class="button button--primary" id="admin-login-btn" type="button" style="width:100%;">Sign In</button>
+      <p class="admin-error" id="admin-login-error"></p>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="admin-dashboard-view" class="container admin-hidden" style="padding: 40px 0 120px;">
+      <div class="admin-topbar">
+        <h1>Insights Admin</h1>
+        <div style="display:flex; gap:16px; align-items:center;">
+          <button class="button button--ghost" id="admin-new-post-btn" type="button">New Post</button>
+          <button class="button button--ghost" id="admin-logout-btn" type="button">Log Out</button>
+        </div>
+      </div>
+
+      <!-- LIST -->
+      <div id="admin-list-view">
+        <div class="admin-list" id="admin-post-list"></div>
+        <div class="admin-empty admin-hidden" id="admin-list-empty">
+          <p>No posts yet. Click "New Post" to write your first Insight.</p>
+        </div>
+      </div>
+
+      <!-- EDITOR -->
+      <div id="admin-editor-view" class="admin-editor admin-hidden">
+        <button class="insight-detail__back" id="admin-back-btn" type="button" style="width:fit-content; background:none; border:none; cursor:pointer; padding:0;">&larr; Back to all posts</button>
+
+        <div class="admin-field">
+          <label for="post-title">Title</label>
+          <input type="text" id="post-title" placeholder="e.g. Why Positioning Comes Before Design" />
+        </div>
+
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label for="post-slug">URL Slug</label>
+            <input type="text" id="post-slug" placeholder="why-positioning-comes-before-design" />
+          </div>
+          <div class="admin-field">
+            <label for="post-category">Category</label>
+            <input type="text" id="post-category" placeholder="e.g. Brand Strategy" />
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="post-excerpt">Excerpt (shown on the Insights grid)</label>
+          <textarea id="post-excerpt" rows="2"></textarea>
+        </div>
+
+        <div class="admin-field">
+          <label for="post-cover">Cover Image</label>
+          <input type="file" id="post-cover" accept="image/*" />
+          <div class="admin-cover-preview" id="post-cover-preview"><span>No Cover Image</span></div>
+        </div>
+
+        <div class="admin-field">
+          <label for="post-body">Body — Markdown supported: **bold**, *italic*, ## heading, &gt; quote, - list item</label>
+          <textarea id="post-body" rows="16"></textarea>
+        </div>
+
+        <div class="admin-checkbox">
+          <input type="checkbox" id="post-published" />
+          <label for="post-published" style="margin:0; text-transform:none; letter-spacing:normal; font-size:14px;">Published (visible on the live site)</label>
+        </div>
+
+        <div class="admin-actions">
+          <button class="button button--primary" id="post-save-btn" type="button">Save Post</button>
+          <button class="button button--ghost admin-hidden" id="post-delete-btn" type="button" style="color:#a3391f; border-color:#a3391f;">Delete Post</button>
+          <span class="admin-status-msg" id="post-status-msg"></span>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
+    <script src="js/supabase-config.js"></script>
+    <script src="js/admin.js"></script>
+  </body>
+</html>

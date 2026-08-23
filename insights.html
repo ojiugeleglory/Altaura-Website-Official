@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
     <link rel="apple-touch-icon" href="assets/images/favicon.png" />
-    <title>Brand Clarity Quiz | Altaura | Brand Elevation Strategy</title>
-    <meta name="description" content="Take Altaura&rsquo;s Brand Clarity Quiz to discover exactly where your brand stands and which service will move it forward." />
+    <title id="page-title">Insights | Altaura | Brand Elevation Strategy</title>
+    <meta name="description" content="Brand strategy thinking from Altaura. Notes on positioning, identity, and what actually elevates a brand." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500&family=DM+Sans:wght@300;400;500&display=swap" />
@@ -21,9 +21,9 @@
           <a href="about.html" class="nav-link">About</a>
           <div class="nav-item--dropdown"><button class="nav-dropdown__trigger nav-link" type="button" aria-expanded="false" aria-haspopup="true">Services<svg class="nav-dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true" focusable="false"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-dropdown"><a href="services.html#brand-audit" class="nav-dropdown__link">Brand Audit</a><a href="services.html#brand-strategy" class="nav-dropdown__link">Brand Strategy</a><a href="services.html#visual-refinement" class="nav-dropdown__link">Visual Refinement</a><a href="services.html#brand-transformation" class="nav-dropdown__link">Brand Transformation</a></div></div>
           <a href="portfolio.html" class="nav-link">Portfolio</a>
-          <a href="quiz.html" class="nav-link active">Brand Quiz</a>
+          <a href="quiz.html" class="nav-link">Brand Quiz</a>
           <a href="ebooks.html" class="nav-link">Resources</a>
-          <a href="insights.html" class="nav-link">Insights</a>
+          <a href="insights.html" class="nav-link active">Insights</a>
           <a href="contact.html" class="nav-link">Contact</a>
         </nav>
         <div class="header-right">
@@ -35,59 +35,56 @@
         <a href="about.html" class="nav-link">About</a>
         <div class="nav-item--dropdown"><button class="nav-dropdown__trigger nav-link" type="button" aria-expanded="false" aria-haspopup="true">Services<svg class="nav-dropdown-arrow" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true" focusable="false"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="nav-dropdown"><a href="services.html#brand-audit" class="nav-dropdown__link">Brand Audit</a><a href="services.html#brand-strategy" class="nav-dropdown__link">Brand Strategy</a><a href="services.html#visual-refinement" class="nav-dropdown__link">Visual Refinement</a><a href="services.html#brand-transformation" class="nav-dropdown__link">Brand Transformation</a></div></div>
         <a href="portfolio.html" class="nav-link">Portfolio</a>
-        <a href="quiz.html" class="nav-link active">Brand Quiz</a>
+        <a href="quiz.html" class="nav-link">Brand Quiz</a>
         <a href="ebooks.html" class="nav-link">Resources</a>
-        <a href="insights.html" class="nav-link">Insights</a>
+        <a href="insights.html" class="nav-link active">Insights</a>
         <a href="contact.html" class="nav-link">Contact</a>
         <a class="button button--primary nav-cta" href="https://forms.gle/a91VRKFu6KSutTgX9" target="_blank" rel="noreferrer">Start Your Brand Upgrade</a>
       </div>
     </header>
 
     <main>
+      <!-- LIST VIEW -->
+      <section id="insights-list-view" class="page-hero animate-on-scroll">
+        <div class="container hero__inner">
+          <p class="eyebrow">Insights</p>
+          <h1>Brand thinking, shared as we build it.</h1>
+          <p class="lede">Notes on positioning, identity, and what actually moves a brand from ordinary to elevated. Written for founders who want the thinking, not just the finished result.</p>
+        </div>
+      </section>
 
-      <!-- Section 1: Quiz Hero -->
-      <section class="quiz-hero animate-on-scroll">
+      <section class="section container">
+        <div class="insights-filters" id="insights-filters" aria-label="Filter by category"></div>
+        <div class="insights-grid" id="insights-grid"></div>
+        <div class="insights-empty admin-hidden" id="insights-empty">
+          <p>New insights are on their way.</p>
+          <p>Check back soon, or take the Brand Quiz while you wait.</p>
+        </div>
+      </section>
+
+      <!-- DETAIL VIEW -->
+      <section id="insights-detail-view" class="section container admin-hidden">
+        <a href="insights.html" class="insight-detail__back">&larr; Back to Insights</a>
+        <p class="eyebrow" id="detail-category"></p>
+        <h1 id="detail-title"></h1>
+        <div class="insight-card__meta" style="margin-top:14px;">
+          <span id="detail-date"></span>
+        </div>
+        <div class="insight-detail__cover admin-hidden" id="detail-cover-wrap">
+          <img id="detail-cover" src="" alt="" />
+        </div>
+        <div class="insight-detail__body" id="detail-body"></div>
+      </section>
+
+      <section class="section section--dark center-text animate-on-scroll">
         <div class="container">
-          <p class="eyebrow">Brand Clarity Quiz</p>
-          <h1>Find out exactly where your brand stands</h1>
-          <p class="quiz-hero__sub">5 questions. 2 minutes. A clear next step for your brand.</p>
+          <h2>Ready to elevate your brand with clarity and intention?</h2>
+          <p class="lede center-text" style="margin-inline:auto;">Every elevated brand starts with one decision: to stop blending in.</p>
+          <div class="button-row center-text" style="justify-content:center; margin-top:24px;">
+            <a class="button button--primary" href="https://forms.gle/a91VRKFu6KSutTgX9" target="_blank" rel="noreferrer">Start Your Brand Upgrade</a>
+          </div>
         </div>
       </section>
-
-      <!-- Section 2: The Quiz -->
-      <section class="section quiz-section" aria-label="Brand Clarity Quiz">
-        <div class="quiz-container" data-brand-quiz>
-
-          <!-- Progress bar -->
-          <div class="quiz-progress" aria-hidden="true">
-            <div class="quiz-progress__bar" data-quiz-progress-bar></div>
-          </div>
-
-          <!-- Quiz active area: meta + slide viewport + next button -->
-          <div class="quiz-area" data-quiz-area>
-
-            <!-- Meta row: back link left, step counter right -->
-            <div class="quiz-meta">
-              <button type="button" class="quiz-back" data-quiz-back aria-label="Go to previous question">&#8592; Back</button>
-              <span class="quiz-counter" data-quiz-counter>Question 1 of 5</span>
-            </div>
-
-            <!-- Slide viewport (overflow hidden for slide transitions) -->
-            <div class="quiz-viewport" data-quiz-viewport></div>
-
-            <!-- Next button (persists across transitions) -->
-            <div class="quiz-actions">
-              <button type="button" class="button button--primary quiz-next-btn" data-quiz-next disabled>Next</button>
-            </div>
-
-          </div>
-
-          <!-- Result area — hidden until quiz complete -->
-          <div class="quiz-result" data-quiz-result hidden aria-live="polite"></div>
-
-        </div>
-      </section>
-
     </main>
 
     <footer class="site-footer">
@@ -135,13 +132,13 @@
     <div class="exit-popup" data-exit-popup aria-hidden="true">
       <div class="exit-popup__overlay" data-exit-popup-close></div>
       <section class="exit-popup__modal" role="dialog" aria-modal="true" aria-labelledby="exit-popup-title">
-        <button class="exit-popup__close" type="button" aria-label="Close free ebook popup" data-exit-popup-close>&times;</button>
+        <button class="exit-popup__close" type="button" aria-label="Close free ebook popup" data-exit-popup-close>×</button>
         <div class="exit-popup__visual">
           <div class="exit-popup__cover-wrap">
             <img src="assets/images/ebooks/WhatsApp Image 2026-06-12 at 17.54.55.jpeg" alt="Free Brand Guide" class="popup-ebook-cover" data-exit-popup-cover />
             <div class="exit-popup__cover-placeholder" data-exit-popup-placeholder>[ Ebook Cover ]</div>
           </div>
-          <p>Free &middot; Instant Download</p>
+          <p>Free · Instant Download</p>
         </div>
         <div class="exit-popup__content">
           <div data-exit-popup-form-wrap>
@@ -155,13 +152,13 @@
               <button type="submit">Send Me the Free Guide</button>
               <p class="exit-popup__note">No spam. Just brand clarity.</p>
             </form>
-            <button class="exit-popup__decline" type="button" data-exit-popup-close>No thanks, I&rsquo;ll figure it out on my own</button>
+            <button class="exit-popup__decline" type="button" data-exit-popup-close>No thanks, I'll figure it out on my own</button>
           </div>
           <div class="exit-popup__success" data-exit-popup-success>
-            <p class="exit-popup__eyebrow">YOU&rsquo;RE IN</p>
+            <p class="exit-popup__eyebrow">YOU'RE IN</p>
             <h2>Your free guide is on its way.</h2>
-            <p>Check your inbox. If you don&rsquo;t see it, check your spam folder.</p>
-            <a href="assets/ebooks/Altaura- The Brand Audit Ebook.pdf" download="Altaura Brand Audit Ebook.pdf">Download your free copy now &rarr;</a>
+            <p>Check your inbox. If you don't see it, check your spam folder.</p>
+            <a href="assets/ebooks/Altaura- The Brand Audit Ebook.pdf" download="Altaura Brand Audit Ebook.pdf">Download your free copy now →</a>
           </div>
         </div>
       </section>
@@ -175,7 +172,7 @@
         </svg>
       </button>
       <aside class="inquiry-bubble__card" aria-label="Book a free brand audit session">
-        <button class="inquiry-bubble__close" type="button" aria-label="Close inquiry form">&times;</button>
+        <button class="inquiry-bubble__close" type="button" aria-label="Close inquiry form">×</button>
         <p class="inquiry-bubble__eyebrow" data-inquiry-eyebrow>FREE SESSION</p>
         <h2>Book a free brand audit</h2>
         <p class="inquiry-bubble__subtext" data-inquiry-subtext>30 minutes. No commitment. Real clarity for your brand.</p>
@@ -183,6 +180,10 @@
       </aside>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
+    <script src="js/supabase-config.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/insights.js"></script>
   </body>
 </html>
