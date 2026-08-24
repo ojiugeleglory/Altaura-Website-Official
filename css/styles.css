@@ -227,6 +227,7 @@ p { margin-top: 0; }
   justify-content: center;
 }
 .flip-card__back .card__topline { color: var(--color-gold); margin-bottom: 14px; }
+.flip-card__back p { font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.75); margin: 0 0 16px; }
 .flip-card__back ul { margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.9; color: rgba(255,255,255,0.82); }
 .flip-card__back li { margin-bottom: 2px; }
 @media (prefers-reduced-motion: reduce) {
