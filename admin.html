@@ -37,6 +37,7 @@
         <h1>Insights Admin</h1>
         <div style="display:flex; gap:16px; align-items:center;">
           <button class="button button--ghost" id="admin-new-post-btn" type="button">New Post</button>
+          <button class="button button--ghost admin-hidden" id="admin-new-portfolio-btn" type="button">New Case Study</button>
           <button class="button button--ghost" id="admin-logout-btn" type="button">Log Out</button>
         </div>
       </div>
@@ -44,6 +45,7 @@
       <div class="admin-tabs" style="display:flex; gap:24px; border-bottom:1px solid var(--color-border); margin-bottom:28px;">
         <button class="filter-tab is-active" id="admin-tab-posts" type="button" data-tab="posts">Posts</button>
         <button class="filter-tab" id="admin-tab-subscribers" type="button" data-tab="subscribers">Subscribers</button>
+        <button class="filter-tab" id="admin-tab-portfolio" type="button" data-tab="portfolio">Portfolio</button>
       </div>
 
       <!-- LIST -->
@@ -60,6 +62,99 @@
         <div class="admin-list" id="admin-subscribers-list"></div>
         <div class="admin-empty admin-hidden" id="admin-subscribers-empty">
           <p>No subscribers yet. Once people sign up in your footer, they'll show up here.</p>
+        </div>
+      </div>
+
+      <!-- PORTFOLIO LIST -->
+      <div id="admin-portfolio-list-view" class="admin-hidden">
+        <div class="admin-list" id="admin-portfolio-list"></div>
+        <div class="admin-empty admin-hidden" id="admin-portfolio-empty">
+          <p>No case studies yet. Click "New Case Study" to add your first one.</p>
+        </div>
+      </div>
+
+      <!-- PORTFOLIO EDITOR -->
+      <div id="admin-portfolio-editor-view" class="admin-editor admin-hidden">
+        <button class="insight-detail__back" id="admin-portfolio-back-btn" type="button" style="width:fit-content; background:none; border:none; cursor:pointer; padding:0;">&larr; Back to all case studies</button>
+
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label for="cs-brand-name">Brand Name</label>
+            <input type="text" id="cs-brand-name" placeholder="e.g. Morgan Grooming" />
+          </div>
+          <div class="admin-field">
+            <label for="cs-category">Category</label>
+            <select id="cs-category">
+              <option value="Brand Transformation">Brand Transformation</option>
+              <option value="Brand Strategy">Brand Strategy</option>
+              <option value="Visual Refinement">Visual Refinement</option>
+              <option value="Brand Creation">Brand Creation</option>
+              <option value="Personal Brand">Personal Brand</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="cs-eyebrow">Card Label (shown above the brand name, e.g. "Rebranding + Sales Strategy")</label>
+          <input type="text" id="cs-eyebrow" placeholder="Defaults to the category if left blank" />
+        </div>
+
+        <div class="admin-row-2">
+          <div class="admin-field">
+            <label for="cs-tag1">Tag 1</label>
+            <input type="text" id="cs-tag1" placeholder="e.g. Packaging" />
+          </div>
+          <div class="admin-field">
+            <label for="cs-tag2">Tag 2</label>
+            <input type="text" id="cs-tag2" placeholder="e.g. Identity" />
+          </div>
+        </div>
+
+        <div class="admin-field">
+          <label for="cs-result">One-Line Result (shown on the collapsed card)</label>
+          <textarea id="cs-result" rows="2" placeholder="e.g. Expanded into wholesale supply, secured 5 partners within 5 weeks."></textarea>
+        </div>
+
+        <div class="admin-field">
+          <label for="cs-challenge">Challenge</label>
+          <textarea id="cs-challenge" rows="2"></textarea>
+        </div>
+
+        <div class="admin-field">
+          <label for="cs-approach">Approach</label>
+          <textarea id="cs-approach" rows="3"></textarea>
+        </div>
+
+        <div class="admin-field">
+          <label for="cs-outcome">Outcome</label>
+          <textarea id="cs-outcome" rows="2"></textarea>
+        </div>
+
+        <div class="admin-field">
+          <label for="cs-closing">Closing Line (a stat line like "5 wks · 5 Partners · 60% Repeat Rate", or a quote)</label>
+          <textarea id="cs-closing" rows="2"></textarea>
+        </div>
+
+        <div class="admin-field">
+          <label for="cs-cover">Cover Image</label>
+          <input type="file" id="cs-cover" accept="image/*" />
+          <div class="admin-cover-preview" id="cs-cover-preview"><span>No Cover Image</span></div>
+        </div>
+
+        <div class="admin-field">
+          <label for="cs-order">Display Order (lower numbers show first, e.g. 1, 2, 3)</label>
+          <input type="number" id="cs-order" value="0" style="max-width:120px;" />
+        </div>
+
+        <div class="admin-checkbox">
+          <input type="checkbox" id="cs-published" />
+          <label for="cs-published" style="margin:0; text-transform:none; letter-spacing:normal; font-size:14px;">Published (visible on the live site)</label>
+        </div>
+
+        <div class="admin-actions">
+          <button class="button button--primary" id="cs-save-btn" type="button">Save Case Study</button>
+          <button class="button button--ghost admin-hidden" id="cs-delete-btn" type="button" style="color:#a3391f; border-color:#a3391f;">Delete Case Study</button>
+          <span class="admin-status-msg" id="cs-status-msg"></span>
         </div>
       </div>
 

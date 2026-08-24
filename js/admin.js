@@ -25,6 +25,35 @@
   const subscribersEmpty = document.getElementById('admin-subscribers-empty');
   const subscribersCount = document.getElementById('admin-subscribers-count');
 
+  const tabPortfolio = document.getElementById('admin-tab-portfolio');
+  const portfolioListView = document.getElementById('admin-portfolio-list-view');
+  const portfolioEditorView = document.getElementById('admin-portfolio-editor-view');
+  const portfolioList = document.getElementById('admin-portfolio-list');
+  const portfolioEmpty = document.getElementById('admin-portfolio-empty');
+  const newPortfolioBtn = document.getElementById('admin-new-portfolio-btn');
+  const portfolioBackBtn = document.getElementById('admin-portfolio-back-btn');
+
+  const csBrandName = document.getElementById('cs-brand-name');
+  const csCategory = document.getElementById('cs-category');
+  const csEyebrow = document.getElementById('cs-eyebrow');
+  const csTag1 = document.getElementById('cs-tag1');
+  const csTag2 = document.getElementById('cs-tag2');
+  const csResult = document.getElementById('cs-result');
+  const csChallenge = document.getElementById('cs-challenge');
+  const csApproach = document.getElementById('cs-approach');
+  const csOutcome = document.getElementById('cs-outcome');
+  const csClosing = document.getElementById('cs-closing');
+  const csCoverInput = document.getElementById('cs-cover');
+  const csCoverPreview = document.getElementById('cs-cover-preview');
+  const csOrder = document.getElementById('cs-order');
+  const csPublished = document.getElementById('cs-published');
+  const csSaveBtn = document.getElementById('cs-save-btn');
+  const csDeleteBtn = document.getElementById('cs-delete-btn');
+  const csStatusMsg = document.getElementById('cs-status-msg');
+
+  let currentPortfolioId = null;
+  let currentPortfolioCoverUrl = '';
+
   const emailInput = document.getElementById('admin-email');
   const passwordInput = document.getElementById('admin-password');
   const loginBtn = document.getElementById('admin-login-btn');
@@ -71,14 +100,34 @@
     listView.classList.toggle('admin-hidden', view !== 'list');
     editorView.classList.toggle('admin-hidden', view !== 'editor');
     subscribersView.classList.toggle('admin-hidden', view !== 'subscribers');
+    portfolioListView.classList.toggle('admin-hidden', view !== 'portfolio-list');
+    portfolioEditorView.classList.toggle('admin-hidden', view !== 'portfolio-editor');
 
     const tabsRow = document.querySelector('.admin-tabs');
-    if (tabsRow) tabsRow.classList.toggle('admin-hidden', view === 'editor');
+    const isEditor = view === 'editor' || view === 'portfolio-editor';
+    if (tabsRow) tabsRow.classList.toggle('admin-hidden', isEditor);
     newPostBtn.classList.toggle('admin-hidden', view !== 'list');
+    newPortfolioBtn.classList.toggle('admin-hidden', view !== 'portfolio-list');
 
     tabPosts.classList.toggle('is-active', view === 'list');
     tabSubscribers.classList.toggle('is-active', view === 'subscribers');
+    tabPortfolio.classList.toggle('is-active', view === 'portfolio-list');
   }
+
+  tabPortfolio.addEventListener('click', () => {
+    showView('portfolio-list');
+    loadPortfolio();
+  });
+
+  newPortfolioBtn.addEventListener('click', () => {
+    resetPortfolioEditor();
+    showView('portfolio-editor');
+  });
+
+  portfolioBackBtn.addEventListener('click', () => {
+    showView('portfolio-list');
+    loadPortfolio();
+  });
 
   tabPosts.addEventListener('click', () => {
     showView('list');
@@ -122,6 +171,187 @@
       </div>
     `).join('');
   }
+
+  function resetPortfolioEditor() {
+    currentPortfolioId = null;
+    currentPortfolioCoverUrl = '';
+    csBrandName.value = '';
+    csCategory.value = 'Brand Transformation';
+    csEyebrow.value = '';
+    csTag1.value = '';
+    csTag2.value = '';
+    csResult.value = '';
+    csChallenge.value = '';
+    csApproach.value = '';
+    csOutcome.value = '';
+    csClosing.value = '';
+    csCoverInput.value = '';
+    csCoverPreview.innerHTML = '<span>No Cover Image</span>';
+    csOrder.value = '0';
+    csPublished.checked = false;
+    csStatusMsg.textContent = '';
+    csDeleteBtn.classList.add('admin-hidden');
+  }
+
+  async function loadPortfolio() {
+    portfolioList.innerHTML = '<div class="admin-list__row">Loading…</div>';
+    const { data, error } = await supabaseClient
+      .from('portfolio_items')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      portfolioList.innerHTML = '';
+      portfolioEmpty.classList.remove('admin-hidden');
+      portfolioEmpty.querySelector('p').textContent = 'Could not load case studies: ' + error.message;
+      return;
+    }
+
+    if (!data || !data.length) {
+      portfolioList.innerHTML = '';
+      portfolioEmpty.classList.remove('admin-hidden');
+      return;
+    }
+
+    portfolioEmpty.classList.add('admin-hidden');
+    portfolioList.innerHTML = data.map((item) => `
+      <div class="admin-list__row" data-id="${item.id}">
+        <div>
+          <strong>${item.brand_name || '(Untitled)'}</strong><br>
+          <span style="color:var(--color-text-muted); font-size:12px;">${item.category || 'Uncategorized'} · Order ${item.display_order}</span>
+        </div>
+        <span class="status ${item.published ? 'status--published' : 'status--draft'}">${item.published ? 'Published' : 'Draft'}</span>
+        <button data-action="edit" data-id="${item.id}">Edit</button>
+        <button data-action="delete" data-id="${item.id}" class="link-danger">Delete</button>
+      </div>
+    `).join('');
+  }
+
+  portfolioList.addEventListener('click', async (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    if (btn.dataset.action === 'edit') {
+      editPortfolioItem(id);
+    } else if (btn.dataset.action === 'delete') {
+      if (confirm('Delete this case study? This cannot be undone.')) {
+        await supabaseClient.from('portfolio_items').delete().eq('id', id);
+        loadPortfolio();
+      }
+    }
+  });
+
+  async function editPortfolioItem(id) {
+    const { data, error } = await supabaseClient.from('portfolio_items').select('*').eq('id', id).maybeSingle();
+    if (error || !data) return;
+
+    currentPortfolioId = data.id;
+    currentPortfolioCoverUrl = data.image_url || '';
+
+    csBrandName.value = data.brand_name || '';
+    csCategory.value = data.category || 'Brand Transformation';
+    csEyebrow.value = data.eyebrow || '';
+    csTag1.value = data.tag_1 || '';
+    csTag2.value = data.tag_2 || '';
+    csResult.value = data.result_stat || '';
+    csChallenge.value = data.challenge || '';
+    csApproach.value = data.approach || '';
+    csOutcome.value = data.outcome || '';
+    csClosing.value = data.closing_line || '';
+    csOrder.value = data.display_order || 0;
+    csPublished.checked = !!data.published;
+
+    csCoverPreview.innerHTML = currentPortfolioCoverUrl
+      ? `<img src="${currentPortfolioCoverUrl}" alt="Cover preview" />`
+      : '<span>No Cover Image</span>';
+
+    csDeleteBtn.classList.remove('admin-hidden');
+    csStatusMsg.textContent = '';
+    showView('portfolio-editor');
+  }
+
+  csCoverInput.addEventListener('change', async () => {
+    const file = csCoverInput.files[0];
+    if (!file) return;
+
+    csStatusMsg.textContent = 'Uploading cover image…';
+    const fileExt = file.name.split('.').pop();
+    const fileName = `portfolio-${Date.now()}-${slugify(file.name.replace(/\.[^/.]+$/, ''))}.${fileExt}`;
+
+    const { error: uploadError } = await supabaseClient.storage
+      .from('insights-images')
+      .upload(fileName, file, { cacheControl: '3600', upsert: false });
+
+    if (uploadError) {
+      csStatusMsg.textContent = 'Image upload failed: ' + uploadError.message;
+      return;
+    }
+
+    const { data: publicUrlData } = supabaseClient.storage
+      .from('insights-images')
+      .getPublicUrl(fileName);
+
+    currentPortfolioCoverUrl = publicUrlData.publicUrl;
+    csCoverPreview.innerHTML = `<img src="${currentPortfolioCoverUrl}" alt="Cover preview" />`;
+    csStatusMsg.textContent = 'Cover image uploaded.';
+  });
+
+  csDeleteBtn.addEventListener('click', async () => {
+    if (!currentPortfolioId) return;
+    if (!confirm('Delete this case study? This cannot be undone.')) return;
+    await supabaseClient.from('portfolio_items').delete().eq('id', currentPortfolioId);
+    showView('portfolio-list');
+    loadPortfolio();
+  });
+
+  csSaveBtn.addEventListener('click', async () => {
+    const brandName = csBrandName.value.trim();
+    const result = csResult.value.trim();
+    const challenge = csChallenge.value.trim();
+    const approach = csApproach.value.trim();
+    const outcome = csOutcome.value.trim();
+
+    if (!brandName || !result || !challenge || !approach || !outcome) {
+      csStatusMsg.textContent = 'Brand name, result, challenge, approach, and outcome are required.';
+      return;
+    }
+
+    const payload = {
+      brand_name: brandName,
+      category: csCategory.value,
+      eyebrow: csEyebrow.value.trim(),
+      tag_1: csTag1.value.trim(),
+      tag_2: csTag2.value.trim(),
+      result_stat: result,
+      challenge,
+      approach,
+      outcome,
+      closing_line: csClosing.value.trim(),
+      image_url: currentPortfolioCoverUrl,
+      display_order: parseInt(csOrder.value, 10) || 0,
+      published: csPublished.checked,
+      updated_at: new Date().toISOString(),
+    };
+
+    csStatusMsg.textContent = 'Saving…';
+    let error;
+    if (currentPortfolioId) {
+      ({ error } = await supabaseClient.from('portfolio_items').update(payload).eq('id', currentPortfolioId));
+    } else {
+      ({ error } = await supabaseClient.from('portfolio_items').insert(payload));
+    }
+
+    if (error) {
+      csStatusMsg.textContent = 'Could not save: ' + error.message;
+      return;
+    }
+
+    csStatusMsg.textContent = 'Saved.';
+    setTimeout(() => {
+      showView('portfolio-list');
+      loadPortfolio();
+    }, 500);
+  });
 
   async function checkSession() {
     const { data } = await supabaseClient.auth.getSession();

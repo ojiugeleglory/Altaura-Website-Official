@@ -3,8 +3,6 @@ const navToggle = document.querySelector('.nav-toggle');
 const navPanel = document.querySelector('.nav-panel');
 const navLinks = document.querySelectorAll('.nav-link');
 const animateItems = document.querySelectorAll('.animate-on-scroll');
-const filterTabs = document.querySelectorAll('.filter-tab');
-const caseCards = document.querySelectorAll('.case-study-card');
 const faqItems = document.querySelectorAll('.faq-item');
 
 if (header) {
@@ -52,30 +50,8 @@ navLinks.forEach((link) => {
   }
 });
 
-filterTabs.forEach((tab) => {
-  tab.addEventListener('click', () => {
-    filterTabs.forEach((item) => item.classList.remove('is-active'));
-    tab.classList.add('is-active');
-    const filter = tab.dataset.filter;
-    caseCards.forEach((card) => {
-      const match = filter === 'all' || card.dataset.category === filter;
-      card.classList.toggle('is-hidden', !match);
-      card.style.transition = 'opacity 0.25s ease';
-      card.style.opacity = match ? '1' : '0';
-    });
-  });
-});
-
-caseCards.forEach((card) => {
-  const toggle = card.querySelector('.case-study-toggle');
-  if (toggle) {
-    toggle.addEventListener('click', () => {
-      card.classList.toggle('expanded');
-      const expanded = card.classList.contains('expanded');
-      toggle.setAttribute('aria-expanded', String(expanded));
-    });
-  }
-});
+/* Portfolio filter/toggle logic now lives in js/portfolio.js,
+   since cards are fetched dynamically and must be wired up after render. */
 
 faqItems.forEach((item) => {
   const question = item.querySelector('.faq-question');
