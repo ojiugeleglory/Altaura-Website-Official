@@ -52,6 +52,7 @@ p { margin-top: 0; }
 .card-grid { display: grid; gap: 24px; }
 .card-grid--2 { grid-template-columns: 1fr; }
 .card-grid--3 { grid-template-columns: 1fr; }
+.card-grid--4 { grid-template-columns: 1fr; }
 .layout-split, .contact-grid, .service-panel, .ebook-grid { display: grid; gap: 32px; }
 .section--surface { background: var(--color-surface); }
 .section--dark { background: var(--color-text-dark); color: rgba(255,255,255,0.85); }
@@ -161,8 +162,8 @@ p { margin-top: 0; }
 /* 8. Components: Cards */
 .card { background: var(--color-white); border: 1px solid var(--color-border); border-radius: 16px; padding: 24px; }
 .card--service { background: #F7F2EC; position: relative; overflow: hidden; border-top: none; }
-.card--service::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #c27e0e; }
-.card-grid .card--service:nth-child(even)::before { background: #3c0d03; }
+.card--service::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: #c27e0e; }
+.card__number { display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; background: var(--color-gold); color: var(--color-white); font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 13px; margin-bottom: 14px; }
 .card--service a { color: var(--color-gold); font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; }
 .card__topline { color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; display: inline-block; margin-bottom: 8px; }
 .case-preview, .testimonial { min-height: 220px; }
@@ -171,6 +172,26 @@ p { margin-top: 0; }
 .testimonial__mark { font-size: 26px; color: var(--color-gold); font-family: 'Cormorant Garamond', serif; }
 .testimonials p { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; }
 .testimonials cite { text-transform: uppercase; letter-spacing: 0.12em; font-size: 11px; color: var(--color-text-muted); font-style: normal; }
+
+/* Component: Testimonials Split (rotating quote + brown CTA panel) */
+.testimonials-split__grid { display: grid; grid-template-columns: 1fr; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px rgba(28,26,23,0.08); }
+.testimonials-split__card { background: var(--color-white); padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; min-height: 340px; }
+.testimonials-split__content { transition: opacity 0.25s ease; }
+.testimonials-split__content.is-fading { opacity: 0; }
+.testimonials-split__quote { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-style: italic; line-height: 1.5; color: var(--color-text-dark); margin: 14px 0 28px; }
+.testimonials-split__author { margin: 0; }
+.testimonials-split__name { font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 15px; color: var(--color-text-dark); margin: 0; }
+.testimonials-split__role { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-muted); margin: 4px 0 0; }
+.testimonials-split__dots { display: flex; gap: 8px; margin-top: 28px; }
+.testimonials-split__dots .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-border); border: none; padding: 0; cursor: pointer; transition: background 0.3s ease, transform 0.3s ease; }
+.testimonials-split__dots .dot.is-active { background: var(--color-gold); transform: scale(1.35); }
+.testimonials-split__panel { background: var(--color-text-dark); padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+.testimonials-split__panel h2 { color: #fff; margin: 0; }
+.testimonials-split__panel p { color: rgba(255,255,255,0.68); margin: 0; font-family: 'DM Sans', sans-serif; font-size: 15px; }
+.testimonials-split__panel .button-row { margin-top: 10px; }
+@media (min-width: 860px) {
+  .testimonials-split__grid { grid-template-columns: 1.1fr 1fr; }
+}
 
 /* 9. Components: Forms */
 input { width: 100%; border: none; background: var(--color-surface); border-radius: 10px; padding: 14px 18px; color: var(--color-text-dark); }
@@ -783,6 +804,7 @@ input:focus { outline: 2px solid var(--color-gold-light); }
   .founder-story { grid-template-columns: 0.95fr 1.05fr; }
   .card-grid--2 { grid-template-columns: repeat(2, 1fr); }
   .card-grid--3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid--4 { grid-template-columns: repeat(2, 1fr); }
   .layout-split { grid-template-columns: 1.1fr 0.9fr; align-items: start; }
   .contact-grid { grid-template-columns: 1fr 1fr; align-items: start; }
   .service-panel { grid-template-columns: 1fr 1fr; align-items: center; }
@@ -819,6 +841,7 @@ input:focus { outline: 2px solid var(--color-gold-light); }
   .container { width: min(var(--max-width), calc(100% - 64px)); }
   .list-grid { grid-template-columns: repeat(2, 1fr); }
   .three-up-grid { grid-template-columns: repeat(3, 1fr); }
+  .card-grid--4 { grid-template-columns: repeat(4, 1fr); }
   .timeline-grid { grid-template-columns: repeat(4, 1fr); }
 
   /* Process Journey: alternating above/below the gold connecting thread */
