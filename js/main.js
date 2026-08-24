@@ -543,50 +543,90 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
   });
 }
 
-/* 100% stat counter — triggers once on viewport entry, respects reduced-motion */
+/* Flip cards — tap to flip on touch devices (hover handles desktop) */
 (function () {
-  var el = document.querySelector('[data-count-up]');
-  if (!el) return;
+  var cards = document.querySelectorAll('.flip-card');
+  if (!cards.length) return;
+
+  cards.forEach(function (card) {
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('a')) return;
+      card.classList.toggle('is-flipped');
+    });
+  });
+}());
+
+/* Hero photo parallax — desktop only, respects reduced-motion */
+(function () {
+  const img = document.querySelector('.hero__media img');
+  const hero = document.querySelector('.hero--full');
+  if (!img || !hero) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let ticking = false;
+
+  function update() {
+    ticking = false;
+    if (window.innerWidth < 960) {
+      img.style.transform = '';
+      return;
+    }
+    const rect = hero.getBoundingClientRect();
+    const offset = rect.top * -0.06;
+    const clamped = Math.max(-40, Math.min(40, offset));
+    img.style.transform = `translateY(${clamped}px)`;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+}());
+(function () {
+  var els = document.querySelectorAll('[data-count-up]');
+  if (!els.length) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  var duration = 2600;
-  var triggered = false;
+  var duration = 2200;
 
-  var run = function () {
-    if (triggered) return;
-    triggered = true;
+  function runOne(el) {
+    var target = parseInt(el.getAttribute('data-count-to'), 10) || 0;
+    var suffix = el.getAttribute('data-count-suffix') || '';
     var startTime = null;
 
     var step = function (timestamp) {
       if (!startTime) startTime = timestamp;
       var elapsed = timestamp - startTime;
       var progress = Math.min(elapsed / duration, 1);
-      /* Ease-out cubic — decelerates smoothly into 100 */
       var eased = 1 - Math.pow(1 - progress, 3);
-      el.textContent = Math.floor(eased * 100) + '%';
+      el.textContent = Math.floor(eased * target) + suffix;
       if (progress < 1) {
         requestAnimationFrame(step);
       } else {
-        el.textContent = '100%';
+        el.textContent = target + suffix;
       }
     };
 
     requestAnimationFrame(step);
-  };
+  }
 
   if ('IntersectionObserver' in window) {
     var obs = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          run();
+          runOne(entry.target);
           obs.unobserve(entry.target);
         }
       });
     }, { threshold: 0.5 });
-    obs.observe(el);
+    els.forEach(function (el) { obs.observe(el); });
   } else {
-    run();
+    els.forEach(runOne);
   }
 }());
 
