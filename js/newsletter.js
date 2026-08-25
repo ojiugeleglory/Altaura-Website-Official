@@ -7,7 +7,16 @@
   if (!form) return;
 
   const emailInput = form.querySelector('[data-newsletter-email]');
+  const submitBtn = form.querySelector('button[type="submit"]');
   const msg = form.querySelector('[data-newsletter-msg]');
+
+  function showSubscribed(message) {
+    emailInput.disabled = true;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Subscribed ✓';
+    msg.textContent = message;
+    msg.classList.add('footer-newsletter__msg--success');
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -23,16 +32,24 @@
       return;
     }
 
+    submitBtn.disabled = true;
+    msg.classList.remove('footer-newsletter__msg--success');
     msg.textContent = 'Subscribing…';
+
     const { error } = await supabaseClient.from('subscribers').insert({ email });
 
-    if (error && error.code !== '23505') {
-      // 23505 = duplicate email, treat as a friendly success instead of an error
-      msg.textContent = 'Something went wrong. Please try again.';
+    if (error && error.code === '23505') {
+      // 23505 = duplicate email, this address is already subscribed
+      showSubscribed("You're already subscribed to our newsletter.");
       return;
     }
 
-    msg.textContent = "You're on the list.";
-    form.reset();
+    if (error) {
+      msg.textContent = 'Something went wrong. Please try again.';
+      submitBtn.disabled = false;
+      return;
+    }
+
+    showSubscribed("You're subscribed! Watch your inbox.");
   });
 })();
