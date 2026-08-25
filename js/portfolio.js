@@ -17,7 +17,7 @@
   }
 
   function cardTemplate(item) {
-    const cover = item.image_url ? `<img src="${item.image_url}" alt="${item.brand_name} portfolio preview" />` : '';
+    const cover = item.image_url ? `<img src="${item.image_url}" alt="${item.brand_name} portfolio preview" loading="lazy" />` : '';
     const tags = [item.tag_1, item.tag_2].filter(Boolean).map((t) => `<span>${t}</span>`).join('');
     return `
       <article class="case-study-card card" data-category="${item.category}">
@@ -68,7 +68,7 @@
   async function load() {
     const { data, error } = await supabaseClient
       .from('portfolio_items')
-      .select('*')
+      .select('brand_name, category, eyebrow, tag_1, tag_2, result_stat, challenge, approach, outcome, closing_line, image_url, display_order')
       .eq('published', true)
       .order('display_order', { ascending: true });
 
@@ -88,5 +88,17 @@
     wireInteractions();
   }
 
+  function showSkeleton() {
+    grid.innerHTML = Array.from({ length: 6 }).map(() => `
+      <article class="case-study-card card case-study-card--skeleton">
+        <div class="case-study-card__image skeleton-block"></div>
+        <div class="skeleton-line skeleton-line--short"></div>
+        <div class="skeleton-line skeleton-line--long"></div>
+        <div class="skeleton-line skeleton-line--medium"></div>
+      </article>
+    `).join('');
+  }
+
+  showSkeleton();
   load();
 })();

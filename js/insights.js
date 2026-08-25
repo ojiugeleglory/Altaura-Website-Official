@@ -109,7 +109,7 @@
   async function loadList() {
     const { data, error } = await supabaseClient
       .from('posts')
-      .select('*')
+      .select('id, title, slug, category, excerpt, cover_image_url, created_at')
       .eq('published', true)
       .order('created_at', { ascending: false });
 
@@ -137,9 +137,21 @@
     renderDetail(data);
   }
 
+  function showSkeleton() {
+    grid.innerHTML = Array.from({ length: 4 }).map(() => `
+      <div class="insight-card insight-card--skeleton">
+        <div class="insight-card__image skeleton-block"></div>
+        <div class="skeleton-line skeleton-line--short"></div>
+        <div class="skeleton-line skeleton-line--long"></div>
+        <div class="skeleton-line skeleton-line--medium"></div>
+      </div>
+    `).join('');
+  }
+
   if (slug) {
     loadDetail(slug);
   } else {
+    showSkeleton();
     loadList();
   }
 })();

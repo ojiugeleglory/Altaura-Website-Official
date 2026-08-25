@@ -11,6 +11,36 @@
     return;
   }
 
+  // Resizes and compresses an image in the browser before upload, so a
+  // multi-MB phone photo becomes a reasonably sized web image (roughly
+  // 150-400KB typically) instead of loading slowly for every visitor.
+  function compressImage(file, maxWidth = 1600, quality = 0.82) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Could not read file'));
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onerror = () => reject(new Error('Could not read image'));
+        img.onload = () => {
+          const scale = Math.min(1, maxWidth / img.width);
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(
+            (blob) => (blob ? resolve(blob) : reject(new Error('Compression failed'))),
+            'image/jpeg',
+            quality
+          );
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+
   const loginView = document.getElementById('admin-login-view');
   const dashboardView = document.getElementById('admin-dashboard-view');
   const listView = document.getElementById('admin-list-view');
@@ -274,13 +304,20 @@
     const file = csCoverInput.files[0];
     if (!file) return;
 
+    csStatusMsg.textContent = 'Optimizing image…';
+    let uploadFile;
+    try {
+      uploadFile = await compressImage(file);
+    } catch (err) {
+      uploadFile = file; // fall back to the original if compression fails
+    }
+
     csStatusMsg.textContent = 'Uploading cover image…';
-    const fileExt = file.name.split('.').pop();
-    const fileName = `portfolio-${Date.now()}-${slugify(file.name.replace(/\.[^/.]+$/, ''))}.${fileExt}`;
+    const fileName = `portfolio-${Date.now()}-${slugify(file.name.replace(/\.[^/.]+$/, ''))}.jpg`;
 
     const { error: uploadError } = await supabaseClient.storage
       .from('insights-images')
-      .upload(fileName, file, { cacheControl: '3600', upsert: false });
+      .upload(fileName, uploadFile, { cacheControl: '3600', upsert: false, contentType: 'image/jpeg' });
 
     if (uploadError) {
       csStatusMsg.textContent = 'Image upload failed: ' + uploadError.message;
@@ -492,13 +529,20 @@
     const file = coverInput.files[0];
     if (!file) return;
 
+    statusMsg.textContent = 'Optimizing image…';
+    let uploadFile;
+    try {
+      uploadFile = await compressImage(file);
+    } catch (err) {
+      uploadFile = file; // fall back to the original if compression fails
+    }
+
     statusMsg.textContent = 'Uploading cover image…';
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}-${slugify(file.name.replace(/\.[^/.]+$/, ''))}.${fileExt}`;
+    const fileName = `${Date.now()}-${slugify(file.name.replace(/\.[^/.]+$/, ''))}.jpg`;
 
     const { error: uploadError } = await supabaseClient.storage
       .from('insights-images')
-      .upload(fileName, file, { cacheControl: '3600', upsert: false });
+      .upload(fileName, uploadFile, { cacheControl: '3600', upsert: false, contentType: 'image/jpeg' });
 
     if (uploadError) {
       statusMsg.textContent = 'Image upload failed: ' + uploadError.message;
