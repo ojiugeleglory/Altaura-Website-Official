@@ -534,7 +534,7 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
 
 /* Hero photo parallax — desktop only, respects reduced-motion */
 (function () {
-  const img = document.querySelector('.hero__media img');
+  const img = document.querySelector('.hero__bg img');
   const hero = document.querySelector('.hero--full');
   if (!img || !hero) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
