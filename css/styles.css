@@ -310,6 +310,14 @@ input:focus { outline: 2px solid var(--color-gold-light); }
 @media (min-width: 860px) {
   .about-hero-photo { height: 65vh; min-height: 420px; max-height: 720px; }
 }
+
+/* Component: Services page photo hero, same full-bleed treatment */
+.services-hero-photo { position: relative; width: 100%; height: 50vh; min-height: 320px; max-height: 480px; overflow: hidden; }
+.services-hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (min-width: 860px) {
+  .services-hero-photo { height: 65vh; min-height: 420px; max-height: 720px; }
+}
+
 .founder-story { display: grid; gap: 28px; align-items: center; }
 .founder-story__media {
   overflow: hidden;
@@ -1297,12 +1305,37 @@ input:focus { outline: 2px solid var(--color-gold-light); }
   to   { opacity: 1; transform: translateX(0); }
 }
 .slide-in-first.visible { animation: slide-in-first 0.85s cubic-bezier(.16,1,.3,1) both; }
+
+/* Mirrored version, enters from the right */
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(48px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.slide-in-right.visible { animation: slide-in-right 0.85s cubic-bezier(.16,1,.3,1) both; }
+
+/* Sequential drop-in — one card at a time, not a group fade */
+@keyframes drop-in {
+  0%   { opacity: 0; transform: translateY(-44px); }
+  62%  { opacity: 1; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-on-scroll.visible .card-grid--drop > *:nth-child(1) { animation: drop-in 0.65s cubic-bezier(.34,1.56,.64,1) 0.1s both; }
+.animate-on-scroll.visible .card-grid--drop > *:nth-child(2) { animation: drop-in 0.65s cubic-bezier(.34,1.56,.64,1) 0.45s both; }
+.animate-on-scroll.visible .card-grid--drop > *:nth-child(3) { animation: drop-in 0.65s cubic-bezier(.34,1.56,.64,1) 0.8s both; }
+.animate-on-scroll.visible .card-grid--drop > *:nth-child(4) { animation: drop-in 0.65s cubic-bezier(.34,1.56,.64,1) 1.15s both; }
+
 @media (prefers-reduced-motion: reduce) {
-  .slide-in-first.visible { animation: none; }
+  .slide-in-first.visible, .slide-in-right.visible { animation: none; }
+  .card-grid--drop > * { animation: none !important; }
 }
 
 /* Hero: staggered child entrance on page load */
-.hero.visible .hero__inner > *:nth-child(1) { animation: rise-in 0.70s cubic-bezier(.22,1,.36,1) 0.05s both; }
+/* Hero headline: slides in from left specifically, other elements keep their rise */
+@keyframes hero-headline-slide {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.hero.visible .hero__inner > *:nth-child(1) { animation: hero-headline-slide 0.8s cubic-bezier(.16,1,.3,1) 0.05s both; }
 .hero.visible .hero__inner > *:nth-child(2) { animation: rise-in 0.75s cubic-bezier(.22,1,.36,1) 0.18s both; }
 .hero.visible .hero__inner > *:nth-child(3) { animation: rise-in 0.70s cubic-bezier(.22,1,.36,1) 0.32s both; }
 .hero.visible .hero__inner > *:nth-child(4) { animation: rise-in 0.70s cubic-bezier(.22,1,.36,1) 0.46s both; }
