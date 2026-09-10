@@ -156,6 +156,8 @@
     listView.classList.toggle('admin-hidden', view !== 'list');
     editorView.classList.toggle('admin-hidden', view !== 'editor');
     subscribersView.classList.toggle('admin-hidden', view !== 'subscribers');
+    resourcesView.classList.toggle('admin-hidden', view !== 'resources');
+    resourcesEditorView.classList.toggle('admin-hidden', view !== 'resources-editor');
     portfolioListView.classList.toggle('admin-hidden', view !== 'portfolio-list');
     portfolioEditorView.classList.toggle('admin-hidden', view !== 'portfolio-editor');
 
@@ -167,7 +169,9 @@
 
     tabPosts.classList.toggle('is-active', view === 'list');
     tabSubscribers.classList.toggle('is-active', view === 'subscribers');
+    tabResources.classList.toggle('is-active', view === 'resources');
     tabPortfolio.classList.toggle('is-active', view === 'portfolio-list');
+    newResourceBtn.classList.toggle('admin-hidden', view !== 'resources');
   }
 
   tabPortfolio.addEventListener('click', () => {
