@@ -440,11 +440,8 @@ const exitPopup = document.querySelector('[data-exit-popup]');
 
 if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
   const exitCloseButtons = exitPopup.querySelectorAll('[data-exit-popup-close]');
-  const exitForm = exitPopup.querySelector('[data-exit-popup-form]');
-  const exitEmail = exitPopup.querySelector('[data-exit-popup-email]');
   const exitCover = exitPopup.querySelector('[data-exit-popup-cover]');
   const exitShownKey = 'altaura_exit_shown';
-  const subscriberKey = 'altaura_subscribers';
   let successTimer;
 
   const showPopup = () => {
@@ -453,7 +450,8 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
     exitPopup.setAttribute('aria-hidden', 'false');
     exitPopup.classList.remove('is-closing');
     exitPopup.classList.add('is-visible');
-    exitEmail.focus();
+    const bookBtn = exitPopup.querySelector('[data-exit-popup-book]');
+    if (bookBtn) bookBtn.focus();
   };
 
   const closePopup = () => {
@@ -464,14 +462,6 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
       exitPopup.classList.remove('is-closing');
       exitPopup.setAttribute('aria-hidden', 'true');
     }, 200);
-  };
-
-  const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
-  const storeSubscriber = (email) => {
-    const current = JSON.parse(localStorage.getItem(subscriberKey) || '[]');
-    current.push(email);
-    localStorage.setItem(subscriberKey, JSON.stringify(current));
   };
 
   if (exitCover) {
@@ -489,34 +479,7 @@ if (exitPopup && !window.location.pathname.toLowerCase().includes('ebooks')) {
     if (event.key === 'Escape' && exitPopup.classList.contains('is-visible')) closePopup();
   });
 
-  exitForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const email = exitEmail.value.trim();
-
-    if (!isValidEmail(email)) {
-      exitForm.classList.add('has-error');
-      exitEmail.setAttribute('aria-invalid', 'true');
-      return;
-    }
-
-    exitForm.classList.remove('has-error');
-    exitEmail.removeAttribute('aria-invalid');
-    storeSubscriber(email);
-    exitPopup.classList.add('is-success');
-
-    // Auto-download the ebook PDF
-    const ebookAnchor = exitPopup.querySelector('[data-exit-popup-success] a[download]');
-    if (ebookAnchor) {
-      const dl = document.createElement('a');
-      dl.href = ebookAnchor.href;
-      dl.download = ebookAnchor.getAttribute('download') || 'Altaura Brand Audit Ebook.pdf';
-      document.body.appendChild(dl);
-      dl.click();
-      document.body.removeChild(dl);
-    }
-
-    successTimer = window.setTimeout(closePopup, 6000);
-  });
+  // No form submission or email storage — popup now links directly to booking
 }
 
 /* Flip cards — tap to flip on touch devices (hover handles desktop) */
