@@ -56,6 +56,7 @@
   const subscribersCount = document.getElementById('admin-subscribers-count');
 
   const tabPortfolio = document.getElementById('admin-tab-portfolio');
+  const tabResources = document.getElementById('admin-tab-resources');
   const portfolioListView = document.getElementById('admin-portfolio-list-view');
   const portfolioEditorView = document.getElementById('admin-portfolio-editor-view');
   const portfolioList = document.getElementById('admin-portfolio-list');
@@ -83,6 +84,31 @@
 
   let currentPortfolioId = null;
   let currentPortfolioCoverUrl = '';
+
+  // Resources admin elements
+  const tabResourcesBtn = tabResources;
+  const resourcesView = document.getElementById('admin-resources-view');
+  const resourcesList = document.getElementById('admin-resources-list');
+  const resourcesEmpty = document.getElementById('admin-resources-empty');
+  const newResourceBtn = document.getElementById('admin-new-resource-btn');
+  const resourcesEditorView = document.getElementById('admin-resources-editor-view');
+  const resourcesBackBtn = document.getElementById('admin-resources-back-btn');
+
+  const resTitle = document.getElementById('res-title');
+  const resDescription = document.getElementById('res-description');
+  const resPrice = document.getElementById('res-price');
+  const resOriginalPrice = document.getElementById('res-original-price');
+  const resStatus = document.getElementById('res-status');
+  const resOrder = document.getElementById('res-order');
+  const resExternalLink = document.getElementById('res-external-link');
+  const resCoverInput = document.getElementById('res-cover');
+  const resCoverPreview = document.getElementById('res-cover-preview');
+  const resSaveBtn = document.getElementById('res-save-btn');
+  const resDeleteBtn = document.getElementById('res-delete-btn');
+  const resStatusMsg = document.getElementById('res-status-msg');
+
+  let currentResourceId = null;
+  let currentResourceCoverUrl = '';
 
   const emailInput = document.getElementById('admin-email');
   const passwordInput = document.getElementById('admin-password');
@@ -149,9 +175,24 @@
     loadPortfolio();
   });
 
+  tabResourcesBtn.addEventListener('click', () => {
+    showView('resources');
+    loadResources();
+  });
+
   newPortfolioBtn.addEventListener('click', () => {
     resetPortfolioEditor();
     showView('portfolio-editor');
+  });
+
+  newResourceBtn.addEventListener('click', () => {
+    resetResourceEditor();
+    showView('resources-editor');
+  });
+
+  resourcesBackBtn.addEventListener('click', () => {
+    showView('resources');
+    loadResources();
   });
 
   portfolioBackBtn.addEventListener('click', () => {
@@ -221,6 +262,92 @@
     csPublished.checked = false;
     csStatusMsg.textContent = '';
     csDeleteBtn.classList.add('admin-hidden');
+  }
+
+  function resetResourceEditor() {
+    currentResourceId = null;
+    currentResourceCoverUrl = '';
+    resTitle.value = '';
+    resDescription.value = '';
+    resPrice.value = '';
+    resOriginalPrice.value = '';
+    resStatus.value = 'free';
+    resOrder.value = '0';
+    resExternalLink.value = '';
+    resCoverInput.value = '';
+    resCoverPreview.innerHTML = '<span>No Cover Image</span>';
+    resStatusMsg.textContent = '';
+    resDeleteBtn.classList.add('admin-hidden');
+  }
+
+  async function loadResources() {
+    resourcesList.innerHTML = '<div class="admin-list__row">Loading…</div>';
+    const { data, error } = await supabaseClient
+      .from('resources')
+      .select('*')
+      .order('display_order', { ascending: true });
+
+    if (error) {
+      resourcesList.innerHTML = '';
+      resourcesEmpty.classList.remove('admin-hidden');
+      resourcesEmpty.querySelector('p').textContent = 'Could not load resources: ' + error.message;
+      return;
+    }
+
+    if (!data || !data.length) {
+      resourcesList.innerHTML = '';
+      resourcesEmpty.classList.remove('admin-hidden');
+      return;
+    }
+
+    resourcesEmpty.classList.add('admin-hidden');
+    resourcesList.innerHTML = data.map((item) => `
+      <div class="admin-list__row" data-id="${item.id}">
+        <div>
+          <strong>${item.title || '(Untitled)'}</strong><br>
+          <span style="color:var(--color-text-muted); font-size:12px;">Status: ${item.status} · Order ${item.display_order}</span>
+        </div>
+        <span class="status">${item.status === 'paid' ? 'Paid' : item.status === 'free' ? 'Free' : 'Coming Soon'}</span>
+        <button data-action="edit" data-id="${item.id}">Edit</button>
+        <button data-action="delete" data-id="${item.id}" class="link-danger">Delete</button>
+      </div>
+    `).join('');
+  }
+
+  resourcesList.addEventListener('click', async (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    if (btn.dataset.action === 'edit') {
+      editResource(id);
+    } else if (btn.dataset.action === 'delete') {
+      if (confirm('Delete this resource? This cannot be undone.')) {
+        await supabaseClient.from('resources').delete().eq('id', id);
+        loadResources();
+      }
+    }
+  });
+
+  async function editResource(id) {
+    const { data, error } = await supabaseClient.from('resources').select('*').eq('id', id).maybeSingle();
+    if (error || !data) return;
+
+    currentResourceId = data.id;
+    currentResourceCoverUrl = data.cover_image_url || '';
+
+    resTitle.value = data.title || '';
+    resDescription.value = data.description || '';
+    resPrice.value = data.price != null ? data.price : '';
+    resOriginalPrice.value = data.original_price != null ? data.original_price : '';
+    resStatus.value = data.status || 'free';
+    resOrder.value = data.display_order || 0;
+    resExternalLink.value = data.external_link || '';
+
+    resCoverPreview.innerHTML = currentResourceCoverUrl ? `<img src="${currentResourceCoverUrl}" alt="Cover preview" />` : '<span>No Cover Image</span>';
+
+    resDeleteBtn.classList.remove('admin-hidden');
+    resStatusMsg.textContent = '';
+    showView('resources-editor');
   }
 
   async function loadPortfolio() {
@@ -333,6 +460,40 @@
     csStatusMsg.textContent = 'Cover image uploaded.';
   });
 
+  // Resource cover upload
+  resCoverInput.addEventListener('change', async () => {
+    const file = resCoverInput.files[0];
+    if (!file) return;
+
+    resStatusMsg.textContent = 'Optimizing image…';
+    let uploadFile;
+    try {
+      uploadFile = await compressImage(file);
+    } catch (err) {
+      uploadFile = file;
+    }
+
+    resStatusMsg.textContent = 'Uploading cover image…';
+    const fileName = `resource-${Date.now()}-${slugify(file.name.replace(/\.[^/.]+$/, ''))}.jpg`;
+
+    const { error: uploadError } = await supabaseClient.storage
+      .from('insights-images')
+      .upload(fileName, uploadFile, { cacheControl: '3600', upsert: false, contentType: 'image/jpeg' });
+
+    if (uploadError) {
+      resStatusMsg.textContent = 'Image upload failed: ' + uploadError.message;
+      return;
+    }
+
+    const { data: publicUrlData } = supabaseClient.storage
+      .from('insights-images')
+      .getPublicUrl(fileName);
+
+    currentResourceCoverUrl = publicUrlData.publicUrl;
+    resCoverPreview.innerHTML = `<img src="${currentResourceCoverUrl}" alt="Cover preview" />`;
+    resStatusMsg.textContent = 'Cover image uploaded.';
+  });
+
   csDeleteBtn.addEventListener('click', async () => {
     if (!currentPortfolioId) return;
     if (!confirm('Delete this case study? This cannot be undone.')) return;
@@ -387,6 +548,60 @@
     setTimeout(() => {
       showView('portfolio-list');
       loadPortfolio();
+    }, 500);
+  });
+
+  resDeleteBtn.addEventListener('click', async () => {
+    if (!currentResourceId) return;
+    if (!confirm('Delete this resource? This cannot be undone.')) return;
+    await supabaseClient.from('resources').delete().eq('id', currentResourceId);
+    showView('resources');
+    loadResources();
+  });
+
+  resSaveBtn.addEventListener('click', async () => {
+    const title = resTitle.value.trim();
+    const description = resDescription.value.trim();
+    const price = resPrice.value !== '' ? parseFloat(resPrice.value) : null;
+    const originalPrice = resOriginalPrice.value !== '' ? parseFloat(resOriginalPrice.value) : null;
+    const status = resStatus.value;
+    const displayOrder = parseInt(resOrder.value, 10) || 0;
+    const externalLink = resExternalLink.value.trim();
+
+    if (!title) {
+      resStatusMsg.textContent = 'Title is required.';
+      return;
+    }
+
+    const payload = {
+      title,
+      description,
+      price,
+      original_price: originalPrice,
+      status,
+      cover_image_url: currentResourceCoverUrl,
+      external_link: externalLink,
+      display_order: displayOrder,
+      updated_at: new Date().toISOString(),
+    };
+
+    resStatusMsg.textContent = 'Saving…';
+    let error;
+    if (currentResourceId) {
+      ({ error } = await supabaseClient.from('resources').update(payload).eq('id', currentResourceId));
+    } else {
+      ({ error } = await supabaseClient.from('resources').insert(payload));
+    }
+
+    if (error) {
+      resStatusMsg.textContent = 'Could not save: ' + error.message;
+      return;
+    }
+
+    resStatusMsg.textContent = 'Saved.';
+    setTimeout(() => {
+      showView('resources');
+      loadResources();
     }, 500);
   });
 
